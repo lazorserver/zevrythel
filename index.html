@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Zevrythel Modz Official</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0b10;
+            --accent: #7aa2f7;
+            --accent-glow: rgba(122, 162, 247, 0.3);
+            --secondary: #bb9af7;
+            --terminal-header: rgba(36, 40, 59, 0.9);
+            --text-main: #c0caf5;
+            --text-dim: #565f89;
+            --green: #9ece6a;
+            --red: #f7768e;
+            --glass: rgba(20, 22, 32, 0.85);
+            --radius: 12px;
+        }
+
+        * { 
+            box-sizing: border-box; 
+            outline: none; 
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Fira Code', monospace;
+            background: var(--bg-dark);
+            display: flex; align-items: center; justify-content: center;
+            min-height: 100vh; color: var(--text-main);
+            overflow: hidden; overscroll-behavior: none; touch-action: none;
+            position: fixed; width: 100%; height: 100%;
+        }
+
+        .bg-animate { position: fixed; inset: 0; z-index: -2; background: radial-gradient(circle at 50% 50%, #1a1b26 0%, #0a0b10 100%); }
+        .blob { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%); filter: blur(80px); animation: move 25s infinite alternate ease-in-out; z-index: -1; }
+        @keyframes move { from { transform: translate(-20%, -20%); } to { transform: translate(30%, 30%); } }
+        
+        .terminal {
+            width: 95%; max-width: 480px;
+            background: var(--glass);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: var(--radius);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+            overflow: hidden; animation: powerOn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes powerOn { 0% { opacity: 0; transform: scale(0.9) translateY(20px); } 100% { opacity: 1; transform: scale(1); } }
+
+        .term-header { background: var(--terminal-header); padding: 12px 18px; display: flex; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .dots { display: flex; gap: 8px; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; opacity: 0.8; }
+        .red-dot { background: var(--red); }
+        .yellow-dot { background: #e0af68; }
+        .green-dot { background: var(--green); }
+        .title { margin: 0 auto; font-size: 0.7rem; color: var(--text-dim); font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; }
+
+        .content { padding: 25px; }
+        .prompt { font-size: 0.95rem; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+        .user { color: var(--green); font-weight: bold; }
+        .cursor { width: 8px; height: 16px; background: var(--accent); animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+        
+        .links { display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px; }
+        .btn {
+            display: flex; align-items: center; gap: 14px; padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: var(--radius); color: var(--text-main); text-decoration: none;
+            transition: 0.3s; position: relative; overflow: hidden; cursor: pointer;
+        }
+        .btn::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 4px; background: var(--accent); opacity: 0; transition: 0.3s; border-radius: var(--radius) 0 0 var(--radius); }
+        .btn:hover { background: rgba(122, 162, 247, 0.08); border-color: var(--accent); transform: translateX(5px); }
+        .btn:hover::before { opacity: 1; }
+        .btn i { color: var(--secondary); font-size: 1.1rem; font-style: normal; letter-spacing: 2.5px; margin-right: -2.5px; }
+
+        .submenu { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; padding-left: 20px; }
+        .submenu.active { max-height: 300px; margin-top: 10px; }
+        .sub-btn { display: block; padding: 8px 15px; font-size: 0.85rem; color: var(--text-dim); text-decoration: none; transition: 0.2s; cursor: pointer; }
+        .sub-btn::before { content: "└─ "; opacity: 0.4; }
+        .sub-btn:hover { color: var(--accent); padding-left: 20px; }
+
+        .chevron { margin-left: auto; transition: 0.4s; font-size: 0.7rem; opacity: 0.4; }
+        .open .chevron { transform: rotate(180deg); opacity: 1; }
+        
+        .info-section { border-top: 1px dashed rgba(255, 255, 255, 0.1); padding-top: 20px; margin-top: 10px; }
+        .info-header { font-size: 0.7rem; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .info-header::after { content: ""; flex: 1; height: 1px; background: rgba(122, 162, 247, 0.2); }
+        .info-grid { display: grid; grid-template-columns: auto 1fr; gap: 8px 20px; font-size: 0.8rem; }
+        .label { color: var(--text-dim); font-weight: 500; }
+        .tag { font-size: 0.65rem; background: rgba(158, 206, 106, 0.1); color: var(--green); padding: 1px 6px; border-radius: 4px; border: 1px solid rgba(158, 206, 106, 0.2); }
+        
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center;
+            z-index: 200; opacity: 0; pointer-events: none; transition: 0.3s;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        .modal {
+            width: 90%; max-width: 400px; background: #1a1b26;
+            border: 1px solid var(--accent); border-radius: 12px;
+            box-shadow: 0 0 30px rgba(122, 162, 247, 0.2); transform: scale(0.8); transition: 0.3s;
+        }
+        .modal-overlay.active .modal { transform: scale(1); }
+        .modal-body { padding: 25px; }
+        .modal-title { color: var(--accent); font-size: 1rem; margin-bottom: 15px; font-weight: bold; border-bottom: 1px solid rgba(122, 162, 247, 0.2); padding-bottom: 10px; }
+        .modal-text { font-size: 0.85rem; color: var(--text-dim); line-height: 1.5; margin-bottom: 20px; }
+        .modal-text b { color: var(--secondary); }
+        .modal-footer { display: flex; gap: 10px; justify-content: flex-end; }
+        .dl-btn { background: var(--accent); color: var(--bg-dark); padding: 8px 16px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; text-decoration: none; transition: 0.2s; }
+        .close-btn { background: rgba(255,255,255,0.05); color: var(--text-main); padding: 8px 16px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; }
+        .dl-btn:hover { background: var(--secondary); transform: translateY(-2px); }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-animate"><div class="blob"></div></div>
+
+    <div class="terminal">
+        <div class="term-header">
+            <div class="dots">
+                <div class="dot red-dot"></div>
+                <div class="dot yellow-dot"></div>
+                <div class="dot green-dot"></div>
+            </div>
+            <div class="title">Zevrythel Modz Official</div>
+        </div>
+
+        <div class="content">
+            <div class="prompt">
+                <span class="user">~ $</span>
+                <span style="color:var(--accent)">echo</span> "Hello, User!"
+                <span class="cursor"></span>
+            </div>
+            
+            <div class="links">
+                <div class="menu-group" id="ggMenu">
+                    <div class="btn" onclick="toggleMenu('ggMenu')">
+                        <i>♨︎</i>
+                        <span>GameGuardian</span>
+                        <span class="chevron">▼</span>
+                    </div>
+                    <div class="submenu">
+                        <div class="sub-btn" onclick="openModal('zGG v4.0', '<b>Changelog:</b><br>- Added HCR2 Crypto support<br>- Added Zip compression support<br>- Optimized<br>- Bug fixes<br><br><b>Note For Script Developer:</b><br>import these Classes to your Lua project by using this function:<br>   luajava.bindClass(&quot;com.zevrythel.*&quot;)<br>  * is the Class you want to import, e.g Zip', 'GG/zGG-v4.0.apk')">zGG v4.0</div>
+                        <div class="sub-btn" onclick="openModal('zGG v3.0', '<b>Changelog:</b><br>- Added luajava support (for script dev)<br>- Optimized file size<br>- Bug fixes', 'GG/zGG-v3.0.apk')">zGG v3.0</div>
+                        <div class="sub-btn" onclick="openModal('zGG v2.0', '<b>Changelog:</b><br>- Added new GG functions (for script dev)', 'GG/zGG-v2.0.apk')">zGG v2.0</div>
+                        <div class="sub-btn" onclick="openModal('zGG v1.0', '<b>Changelog:</b><br>- Added daemon fixes for Android 10+<br>- Added new GG functions (for script dev).', 'GG/zGG-v1.0.apk')">zGG v1.0</div>
+                    </div>
+                </div>
+                
+                <div class="menu-group" id="vmMenu">
+                    <div class="btn" onclick="toggleMenu('vmMenu')">
+                        <i>⧉</i>
+                        <span>Virtual Machine</span>
+                        <span class="chevron">▼</span>
+                    </div>
+                    <div class="submenu">
+                        <div class="sub-btn" onclick="openModal('Multi App Ultra', '<b>Description:</b><br>Working VM for Hill Climb Racing 2 to use GameGuardian without root access.<br><br><b>Warning:</b><br>This VM might not supported for your device.', 'VM/Multi-App-Ultra.apk')">Multi App Ultra</div>
+                    </div>
+                </div>
+                
+                <div class="menu-group" id="hcr2Menu">
+                    <div class="btn" onclick="toggleMenu('hcr2Menu')">
+                        <i>𖥂</i>
+                        <span>HCR2 Scripts</span>
+                        <span class="chevron">▼</span>
+                    </div>
+                    <div class="submenu">
+                        <div class="sub-btn" onclick="openModal('NEXEN v1.0', '<b>Features:</b><br>- Player Menu<br>- Event Menu<br>- Shop Menu<br>- Tools Menu<br>- and much more<br><br><b>Why Use NEXEN:</b><br>- Custom UI<br>- Powerful and Stable<br>- Optimized script processing speed<br>- And more<br><br><b>Requirements:</b><br>- >=zGG v4.0<br>- =Multi App Ultra or ROOT Only', '#')">NEXEN v1.0</div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="info-section">
+                <div class="info-header">About Us</div>
+                <div class="info-grid">
+                    <span class="label">Developer:</span>
+                    <span class="value">Lazor <span class="tag">Lead</span></span>
+                    <span class="label">Thanks:</span>
+                    <span class="value" style="font-size: 0.75rem; line-height: 1.4;">Guk, Timerise, Dani®, ARYAN, Lan9118, Donuts, Reicie, OTOP, LV, ENDUP, Dragon, Pr0stoZak, AMR, Rave, and more.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-body">
+                <div class="modal-title" id="modalTitle">File Info</div>
+                <div class="modal-text" id="modalText">Loading metadata...</div>
+                <div class="modal-footer">
+                    <div class="close-btn" onclick="closeModal()">Back</div>
+                    <a href="#" class="dl-btn" id="dlLink">Download</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu(id) {
+            const el = document.getElementById(id);
+            el.querySelector('.submenu').classList.toggle('active');
+            el.classList.toggle('open');
+        }
+        
+        function openModal(title, text, link) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalText').innerHTML = text;
+            document.getElementById('dlLink').href = link;
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+        
+        document.getElementById('modalOverlay').addEventListener('click', (e) => {
+            if (e.target.id === 'modalOverlay') closeModal();
+        });
+        
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) e.preventDefault();
+        });
+    </script>
+</body>
+</html>
