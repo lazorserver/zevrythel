@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Zevrythel Modz Official (404)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="bg-animate"><div class="blob"></div></div>
+
+    <div class="terminal">
+        <div class="term-header">
+            <div class="dots">
+                <div class="dot red-dot"></div>
+                <div class="dot yellow-dot"></div>
+                <div class="dot green-dot"></div>
+            </div>
+            <div class="title">Zevrythel Modz Official</div>
+        </div>
+
+        <div class="content">
+            <div class="prompt">
+                <span class="user">~ $</span>
+                <span style="color:var(--accent)">cd</span>
+                <span style="color:var(--text-dim)" id="typedPath"></span>
+                <span class="cursor"></span>
+            </div>
+
+            <div style="margin-bottom: 20px; font-size: 0.85rem; line-height: 1.8;">
+                <div style="color: var(--red);">bash: <span id="errorPath"></span>: No such file or directory</div>
+                <div style="color: var(--text-dim); margin-top: 8px;">exit code: <span style="color: var(--red);">404</span></div>
+            </div>
+
+            <div style="border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 20px; margin-bottom: 20px;">
+                <div class="info-header">Traceback</div>
+                <div style="font-size: 0.8rem; line-height: 2; color: var(--text-dim);">
+                    <div><span style="color: var(--green);">at</span> router.resolve(<span style="color: var(--secondary);">"<span id="traceUrl"></span>"</span>)</div>
+                    <div><span style="color: var(--green);">at</span> server.handleRequest(<span style="color: var(--accent);">req, res</span>)</div>
+                    <div><span style="color: var(--green);">at</span> github.pages(<span style="color: var(--accent);">origin</span>)</div>
+                </div>
+            </div>
+
+            <a href="/" style="text-decoration: none;">
+                <div class="btn">
+                    <i>⌂</i>
+                    <span>cd ~/ (Go Home)</span>
+                </div>
+            </a>
+
+        </div>
+    </div>
+
+    <script>
+        const path = window.location.pathname;
+        document.getElementById('typedPath').innerText = path;
+        document.getElementById('errorPath').innerText = path;
+        document.getElementById('traceUrl').innerText = path;
+
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) e.preventDefault();
+        });
+    </script>
+</body>
+</html>
